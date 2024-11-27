@@ -15,6 +15,7 @@ class AppDialog {
     Widget? iconWidget,
     Widget? contentWidget,
     Widget? actionWidget,
+    Widget? firstActionWidget,
   }) {
     Get.dialog(
       AlertDialog(
@@ -22,6 +23,12 @@ class AppDialog {
         title: WidgetText(data: title),
         content: contentWidget,
         actions: [
+
+          firstActionWidget ?? const SizedBox(),
+
+
+
+
           actionWidget ??
               WidgetTextButton(
                 label: 'Cancel',

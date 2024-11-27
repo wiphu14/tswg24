@@ -21,6 +21,7 @@ import 'package:dio/dio.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:image/image.dart' as image;
 
@@ -29,6 +30,19 @@ import 'package:screenshot/screenshot.dart';
 
 class AppService {
   AppController appController = Get.put(AppController());
+
+  Future<void> setupIndexApi() async {
+
+    var indexApi = await GetStorage().read('api');
+
+    if (indexApi !=null) {
+      appController.indexApi.value=indexApi;
+    }
+
+
+  }
+
+
 
   String displayDateTime({required String dateTimeString}) {
     var strings = dateTimeString.split(' ');

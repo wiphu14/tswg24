@@ -5,6 +5,7 @@ import 'package:checkofficer/states/detail.dart';
 import 'package:checkofficer/states/scan_qr.dart';
 import 'package:checkofficer/utility/app_constant.dart';
 import 'package:checkofficer/utility/app_controller.dart';
+import 'package:checkofficer/utility/app_dialog.dart';
 import 'package:checkofficer/utility/app_service.dart';
 import 'package:checkofficer/widgets/widget_button.dart';
 import 'package:checkofficer/widgets/widget_icon_button.dart';
@@ -13,6 +14,7 @@ import 'package:checkofficer/widgets/widget_text.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ListGuest extends StatefulWidget {
   const ListGuest({super.key});
@@ -30,6 +32,8 @@ class _ListGuestState extends State<ListGuest> {
   @override
   void initState() {
     super.initState();
+
+    AppService().setupIndexApi();
 
     easyRefreshController = EasyRefreshController(
       controlFinishRefresh: true,
@@ -63,6 +67,27 @@ class _ListGuestState extends State<ListGuest> {
                     Get.to(const ScanQr());
                   },
                 ),
+                WidgetIconButton(
+                  iconData: Icons.exit_to_app,
+                  pressFunc: () {
+                    AppDialog(context: context).normalDialog(
+                        title: 'Sigout',
+                        contentWidget: WidgetText(
+                            data: 'โปรด Confirm เพื่อ Signout จาก App'),
+                        firstActionWidget: WidgetButton(
+                          label: 'Confirm',
+                          pressFunc: () async{
+
+                            await GetStorage().erase().then((value) {
+                              Get.offAllNamed('/authen');
+                            },);
+
+
+
+                          },
+                        ));
+                  },
+                )
               ],
             ),
             floatingActionButton: WidgetButton(
@@ -91,7 +116,10 @@ class _ListGuestState extends State<ListGuest> {
                     },
                     child: ListView.builder(
                       // reverse: true,
-                      itemCount: AppConstant.amountLoad * timeLoad >= appController.guestModels.length ?  appController.guestModels.length  : AppConstant.amountLoad * timeLoad ,
+                      itemCount: AppConstant.amountLoad * timeLoad >=
+                              appController.guestModels.length
+                          ? appController.guestModels.length
+                          : AppConstant.amountLoad * timeLoad,
                       itemBuilder: (context, index) => InkWell(
                         onTap: () {
                           print(
